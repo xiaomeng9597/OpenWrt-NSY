@@ -100,6 +100,13 @@ jobs:
         echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
         echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_OUTPUT
 
+    - name: Install Feeds
+      run: |
+        df -hT
+        cd $OPENWRT_PATH
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+
     - name: Generate Variables
       id: variable
       run: |
@@ -123,13 +130,6 @@ jobs:
         ccache: false
         mixkey: ${{ env.SOURCE_REPO }}-${{ env.REPO_BRANCH }}-${{ env.DEVICE_TARGET }}-${{ env.DEVICE_SUBTARGET }}
         prefix: ${{ env.OPENWRT_PATH }}
-
-    - name: Install Feeds
-      run: |
-        df -hT
-        cd $OPENWRT_PATH
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
 
     - name: Load Custom Configuration
       run: |
